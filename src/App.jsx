@@ -15,10 +15,13 @@ import ContactUsPage from "./pages/ContactUsPage";
 import AboutUsPage from "./pages/AboutUsPage";
 import ServicePage from "./pages/ServicePage";
 import AllTaskPage from "./pages/AllTaskPage";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
   return (
     <Fragment>
+      <Toaster position="top-right" reverseOrder={false} />
+
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<DashboardPage />} />
