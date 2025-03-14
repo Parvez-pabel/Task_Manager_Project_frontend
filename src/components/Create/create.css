@@ -1,0 +1,13 @@
+@media (max-width: 576px) {
+  .container-fluid {
+    width: 90% !important; /* Adjust width for small screens */
+  }
+
+  .card {
+    padding: 1.5rem; /* Reduce padding for mobile */
+  }
+
+  .btn {
+    width: 100%; /* Full width button on mobile */
+  }
+}

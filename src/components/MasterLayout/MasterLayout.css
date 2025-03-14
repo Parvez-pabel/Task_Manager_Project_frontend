@@ -1,0 +1,23 @@
+.main-container {
+  transition: margin-left 0.3s ease-in-out;
+}
+
+.sidebar-open .content {
+  margin-left: 250px; /* Sidebar এর প্রস্থ অনুযায়ী adjust করুন */
+  transition: margin-left 0.3s ease-in-out;
+}
+.btn-custom {
+  width: 100%; /* Default: Full width on small screens */
+}
+
+@media (min-width: 768px) { /* Medium devices (Tablets) */
+  .btn-custom {
+    width: 75%;
+  }
+}
+
+@media (min-width: 992px) { /* Large devices (Laptops, Desktops) */
+  .btn-custom {
+    width: 50%;
+  }
+}

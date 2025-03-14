@@ -1,0 +1,8 @@
+.main-container {
+  transition: margin-left 0.3s ease-in-out;
+}
+
+.sidebar-open .content {
+  margin-left: 250px; /* Sidebar এর প্রস্থ অনুযায়ী adjust করুন */
+  transition: margin-left 0.3s ease-in-out;
+}
