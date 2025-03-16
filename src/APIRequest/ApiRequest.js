@@ -1,9 +1,9 @@
 import axios from "axios";
-import formHelper from "../helper/FormHelper";
+import { ErrorToast, SuccessToast } from "../helper/FormHelper";
 
-const BaseURI = "https://task-manager-project-pearl.vercel.app/api/v1";
-
-export function registrationRequest(
+const BaseUrl = "https://task-manager-project-pearl.vercel.app/api/v1";
+//registration api call with axios
+export function RegistrationRequest(
   email,
   firstName,
   lastName,
@@ -11,33 +11,39 @@ export function registrationRequest(
   password,
   photo
 ) {
-  let URL = `${BaseURI}/registration`;
-
-  let PostBody = { email, firstName, lastName, mobile, password, photo }; // ✅ Cleaner syntax
-
+  let URL = BaseUrl + "/registration";
+  let PostBody = {
+    email: email,
+    firstName: firstName,
+    lastName: lastName,
+    mobile: mobile,
+    password: password,
+    photo: photo,
+  };
   return axios
     .post(URL, PostBody)
     .then((res) => {
       if (res.status === 200) {
-        const responseData = res.data;
-
-        if (responseData?.status === "fail") {
-          if (responseData?.data?.keyPattern?.email === 1) {
-            formHelper.ErrorToast("Email already exists");
+        if (res.data.status === "fail") {
+          if (res.data.data.keyPattern.email === 1) {
+            ErrorToast("Email already exists");
+            return false;
           } else {
-            formHelper.ErrorToast("Registration failed. Please try again.");
+            ErrorToast("Unexpected error occurred. Please try again.");
+            return false;
           }
-          return false;
+        } else {
+          SuccessToast("Registration Successful");
+          return true; // return true if registration is successful  else return false
         }
-        formHelper.ErrorToast("Unexpected response. Please try again.");
+      } else {
+        ErrorToast("Registration failed. Please try again.");
         return false;
       }
-
-      formHelper.SuccessToast("Registration successful!");
-      return true;
     })
-    .catch((err) => {
-      formHelper.ErrorToast("Network error or server issue.");
-      console.error("Registration Error:", err);
+    .catch((error) => {
+      ErrorToast("Server Error");
+      console.error(error);
+      // Handle error here
     });
 }

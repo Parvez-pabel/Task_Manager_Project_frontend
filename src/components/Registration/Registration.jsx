@@ -1,7 +1,13 @@
 import React, { useRef } from "react";
 import { Link } from "react-router-dom";
-import formHelper from "../../helper/FormHelper"; // Import FormHelper
-import { registrationRequest } from "../../APIRequest/ApiRequest";
+import {
+  ErrorToast,
+  IsEmail,
+  IsEmpty,
+  IsMobile,
+  IsPassword,
+} from "../../helper/FormHelper";
+import { RegistrationRequest } from "../../APIRequest/ApiRequest";
 
 const RegistrationForm = () => {
   let emailRef = useRef();
@@ -19,23 +25,32 @@ const RegistrationForm = () => {
     const mobile = mobileRef.current.value;
     const password = passwordRef.current.value;
 
-    if (!formHelper.IsEmail(email)) {
-      formHelper.ErrorToast("Valid Email Address Required");
-    } else if (formHelper.IsEmpty(firstName)) {
-      formHelper.ErrorToast("First Name Required");
-    } else if (formHelper.IsEmpty(lastName)) {
-      formHelper.ErrorToast("Last Name Required");
-    } else if (!formHelper.IsMobile(mobile)) {
-      formHelper.ErrorToast("Valid Mobile Number Required");
-    } else if (!formHelper.IsPassword(password)) {
-      formHelper.ErrorToast(
-        "Password must be at least 8 characters and contain 1 letter & 1 number"
-      );
+    if (!IsEmail(email)) {
+      ErrorToast("Valid Email Address Required");
+    } else if (IsEmpty(firstName)) {
+      ErrorToast("First Name Required");
+    } else if (IsEmpty(lastName)) {
+      ErrorToast("Last Name Required");
+    } else if (!IsMobile(mobile)) {
+      ErrorToast("Valid Mobile Required");
+    } else if (!IsPassword(password)) {
+      ErrorToast("Password Required");
     } else {
-      registrationRequest(email, firstName, lastName, mobile, password, "").then((result) => {
-        if (result===true) {
-          
-        } 
+      RegistrationRequest(
+        email,
+        firstName,
+        lastName,
+        mobile,
+        password,
+        ""
+      ).then((result) => {
+        if (result === true) {
+          // Registration successful, redirect to login page
+          window.location.href = "";
+        } else {
+          // Registration failed, display error message
+          ErrorToast("Registration failed. Please try again.");
+        }
       });
     }
   };
@@ -55,7 +70,7 @@ const RegistrationForm = () => {
             />
             <div className="card-body">
               <h5 className="card-title text-center">Registration</h5>
-              <form onSubmit={onRegistration}>
+              <form>
                 <div className="mb-3">
                   <input
                     ref={emailRef}
@@ -98,6 +113,7 @@ const RegistrationForm = () => {
                 </div>
                 <div className="d-flex justify-content-center">
                   <button
+                    onClick={onRegistration}
                     type="submit"
                     className="btn btn-success w-100 text-nowrap"
                   >
