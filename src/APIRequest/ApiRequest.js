@@ -1,9 +1,13 @@
 import axios from "axios";
 import { ErrorToast, SuccessToast } from "../helper/FormHelper";
+import store from "../redux/store/store";
+import { HideLoader, ShowLoader } from "../redux/state-Slice/SattingSlice";
+import { setToken, setUserDetails } from "../helper/sessionHelper";
 
 const BaseUrl = "https://task-manager-project-pearl.vercel.app/api/v1";
-//registration api call with axios
-export function RegistrationRequest(
+
+// Registration API request
+export async function RegistrationRequest(
   email,
   firstName,
   lastName,
@@ -11,39 +15,84 @@ export function RegistrationRequest(
   password,
   photo
 ) {
-  let URL = BaseUrl + "/registration";
-  let PostBody = {
-    email: email,
-    firstName: firstName,
-    lastName: lastName,
-    mobile: mobile,
-    password: password,
-    photo: photo,
-  };
-  return axios
-    .post(URL, PostBody)
-    .then((res) => {
-      if (res.status === 200) {
-        if (res.data.status === "fail") {
-          if (res.data.data.keyPattern.email === 1) {
-            ErrorToast("Email already exists");
-            return false;
-          } else {
-            ErrorToast("Unexpected error occurred. Please try again.");
-            return false;
-          }
+  store.dispatch(ShowLoader()); // Show loader at start
+  try {
+    const URL = `${BaseUrl}/registration`;
+    const PostBody = { email, firstName, lastName, mobile, password, photo };
+
+    // Make the API request
+    const response = await axios.post(URL, PostBody);
+
+    // Check for successful response
+    if (response.status === 200) {
+      SuccessToast("Registration Successful");
+      return true;
+    } else {
+      ErrorToast("Registration failed. Please try again.");
+      return false;
+    }
+  } catch (error) {
+    console.error("Registration Error:", error);
+
+    if (error.response) {
+      const { status, data } = error.response;
+      const errorMessage = data?.message || "Unexpected error occurred";
+
+      if (status === 400) {
+        if (errorMessage.includes("Email already in use")) {
+          ErrorToast("Email already exists");
         } else {
-          SuccessToast("Registration Successful");
-          return true; // return true if registration is successful  else return false
+          ErrorToast(errorMessage);
         }
       } else {
-        ErrorToast("Registration failed. Please try again.");
-        return false;
+        ErrorToast(errorMessage);
       }
-    })
-    .catch((error) => {
-      ErrorToast("Server Error");
-      console.error(error);
-      // Handle error here
-    });
+    } else {
+      // Network or server issues
+      ErrorToast("Server Error. Please check your internet connection.");
+    }
+
+    return false;
+  } finally {
+    store.dispatch(HideLoader()); // Always hide loader
+  }
+}
+// login API request
+
+export async function LoginRequest(email, password) {
+  
+  store.dispatch(ShowLoader());
+  
+  // Show loader at start
+  try {
+    
+    const URL = `${BaseUrl}/login`;
+    const PostBody = { email: email, password: password };
+
+    // Make the API request
+    const { data, status } = await axios.post(URL, PostBody);
+
+    // Ensure success response
+    if (status === 200 && data.token && data.user) {
+      setToken(data.token);
+      setUserDetails(data.user);
+      SuccessToast("Login Successful");
+      // Redirect to dashboard
+      
+      return true;
+    }
+  } catch (error) {
+    console.error("Login Error:", error);
+
+    if (error.response) {
+      const errorMessage =
+        error.response.data?.message || "Invalid credentials";
+      ErrorToast(errorMessage);
+    } else {
+      ErrorToast("Server Error. Please check your internet connection.");
+    }
+  } finally {
+    store.dispatch(HideLoader()); // Always hide loader
+  }
+  return false;
 }

@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import DashboardPage from "./pages/DashboardPage";
 import CreatePage from "./pages/CreatePage";
 import NewPage from "./pages/NewPage";
@@ -16,34 +16,46 @@ import AboutUsPage from "./pages/AboutUsPage";
 import ServicePage from "./pages/ServicePage";
 import AllTaskPage from "./pages/AllTaskPage";
 import { Toaster } from "react-hot-toast";
-
+import { getToken } from "./helper/sessionHelper";
 const App = () => {
-  return (
-    <Fragment>
-      <Toaster position="top-right" reverseOrder={false} />
-
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<DashboardPage />} />
-          <Route path="/create" element={<CreatePage />} />
-          <Route path="/All" element={<AllTaskPage />} />
-          <Route path="/Progress" element={<ProgressPage />} />
-          <Route path="/Completed" element={<CompletedPage />} />
-          <Route path="/Canceled" element={<CanceledPage />} />
-          <Route path="/New" element={<NewPage />} />
-          <Route path="/Profile" element={<ProfilePage />} />
-          <Route path="/Login" element={<LoginPage />} />
-          <Route path="/Registration" element={<RegistrationPage />} />
-          <Route path="/ForgetPassword" element={<ForgetPasswordPage />} />
-          <Route path="/contact" element={<ContactUsPage />} />
-          <Route path="/about" element={<AboutUsPage />} />
-          <Route path="/service" element={<ServicePage />} />
-          <Route path="*" element={<NotfoundPage />} />
-        </Routes>
-      </BrowserRouter>
-      {/* <FullScreenLoader /> */}
-    </Fragment>
-  );
+  if (getToken()) {
+    return (
+      <Fragment>
+        <Toaster position="top-right" reverseOrder={false} />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<DashboardPage />} />
+            <Route path="/create" element={<CreatePage />} />
+            <Route path="/All" element={<AllTaskPage />} />
+            <Route path="/Progress" element={<ProgressPage />} />
+            <Route path="/Completed" element={<CompletedPage />} />
+            <Route path="/Canceled" element={<CanceledPage />} />
+            <Route path="/New" element={<NewPage />} />
+            <Route path="/Profile" element={<ProfilePage />} />
+            <Route path="*" element={<NotfoundPage />} />
+          </Routes>
+        </BrowserRouter>
+      </Fragment>
+    );
+  } else {
+    return (
+      <Fragment>
+        <Toaster position="top-right" reverseOrder={false} />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Navigate to={"/Login"} replace />} />
+            <Route path="/Login" element={<LoginPage />} />
+            <Route path="/Registration" element={<RegistrationPage />} />
+            <Route path="/ForgetPassword" element={<ForgetPasswordPage />} />
+            <Route path="/contact" element={<ContactUsPage />} />
+            <Route path="/about" element={<AboutUsPage />} />
+            <Route path="/service" element={<ServicePage />} />
+            <Route path="*" element={<NotfoundPage />} />
+          </Routes>
+        </BrowserRouter>
+      </Fragment>
+    );
+  }
 };
 
 export default App;

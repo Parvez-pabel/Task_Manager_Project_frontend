@@ -1,7 +1,32 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
+import { ErrorToast, IsEmail, IsEmpty } from "../../helper/FormHelper";
+import { LoginRequest } from "../../APIRequest/ApiRequest";
 
 const Login = () => {
+  let passRef,
+    emailRef = useRef();
+
+  const SubmitLogin = (event) => {
+    event.preventDefault();
+
+    let email = emailRef.value;
+    let pass = passRef.value;
+
+    if (!IsEmail(email)) {
+      ErrorToast("Invalid Email Address");
+    } else if (IsEmpty(pass)) {
+      ErrorToast("Password Required");
+    } else {
+      LoginRequest(email, pass).then((result) => {
+        if (result === true) {
+          
+          // Login successful, redirect to dashboard page thorough href
+          window.location.href = "/";
+        }
+      });
+    }
+  };
   return (
     <>
       <div className="container-fluid d-flex justify-content-center align-items-center vh-100">
@@ -21,6 +46,7 @@ const Login = () => {
                 <form>
                   <div className="mb-3">
                     <input
+                      ref={(input) => (emailRef = input)}
                       type="email"
                       className="form-control "
                       placeholder="Enter your email"
@@ -29,6 +55,7 @@ const Login = () => {
 
                   <div className="mb-3">
                     <input
+                      ref={(input) => (passRef = input)}
                       type="password"
                       className="form-control "
                       placeholder="Password"
@@ -36,6 +63,7 @@ const Login = () => {
                   </div>
                   <div className="d-flex justify-content-center">
                     <button
+                      onClick={SubmitLogin}
                       type="submit"
                       className="btn btn-success w-100 text-nowrap"
                     >

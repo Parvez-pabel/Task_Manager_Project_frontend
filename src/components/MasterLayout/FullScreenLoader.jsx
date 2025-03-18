@@ -1,9 +1,13 @@
 import React from "react";
 import "./FullScreenLoader.css";
+import { useSelector } from "react-redux";
 const FullScreenLoader = () => {
+  // TODO: Add your custom loader here
+  const loader = useSelector((state) => state.settings.loader);
+
   return (
     <>
-      <div className="container mx-auto">
+      <div className={loader + "container mx-auto"}>
         <svg
           className="loader"
           xmlns="http://www.w3.org/2000/svg"

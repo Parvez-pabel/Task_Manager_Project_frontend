@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ErrorToast,
   IsEmail,
@@ -10,14 +10,15 @@ import {
 import { RegistrationRequest } from "../../APIRequest/ApiRequest";
 
 const RegistrationForm = () => {
-  let emailRef = useRef();
-  let firstNameRef = useRef();
-  let lastNameRef = useRef();
-  let mobileRef = useRef();
-  let passwordRef = useRef();
+  const emailRef = useRef();
+  const firstNameRef = useRef();
+  const lastNameRef = useRef();
+  const mobileRef = useRef();
+  const passwordRef = useRef();
+  const navigate = useNavigate(); // Use React Router for navigation
 
   const onRegistration = (event) => {
-    event.preventDefault(); // Prevent page refresh
+    event.preventDefault(); // Prevent default form submission
 
     const email = emailRef.current.value;
     const firstName = firstNameRef.current.value;
@@ -36,22 +37,15 @@ const RegistrationForm = () => {
     } else if (!IsPassword(password)) {
       ErrorToast("Password Required");
     } else {
-      RegistrationRequest(
-        email,
-        firstName,
-        lastName,
-        mobile,
-        password,
-        ""
-      ).then((result) => {
-        if (result === true) {
-          // Registration successful, redirect to login page
-          window.location.href = "";
-        } else {
-          // Registration failed, display error message
-          ErrorToast("Registration failed. Please try again.");
+      RegistrationRequest(email, firstName, lastName, mobile, password).then(
+        (result) => {
+          if (result === true) {
+            navigate("/login"); // Use navigate instead of window.location
+          } else {
+            ErrorToast("Registration failed. Please try again.");
+          }
         }
-      });
+      );
     }
   };
 
@@ -70,50 +64,59 @@ const RegistrationForm = () => {
             />
             <div className="card-body">
               <h5 className="card-title text-center">Registration</h5>
-              <form>
+              <form onSubmit={onRegistration}>
                 <div className="mb-3">
                   <input
                     ref={emailRef}
+                    name="email"
                     type="email"
                     className="form-control"
                     placeholder="Enter your email"
+                    autoComplete="email"
                   />
                 </div>
                 <div className="mb-3">
                   <input
                     ref={firstNameRef}
+                    name="firstName"
                     type="text"
                     className="form-control"
                     placeholder="First Name"
+                    autoComplete="given-name"
                   />
                 </div>
                 <div className="mb-3">
                   <input
                     ref={lastNameRef}
+                    name="lastName"
                     type="text"
                     className="form-control"
                     placeholder="Last Name"
+                    autoComplete="family-name"
                   />
                 </div>
                 <div className="mb-3">
                   <input
                     ref={mobileRef}
-                    type="text"
+                    name="mobile"
+                    type="tel"
                     className="form-control"
                     placeholder="Mobile Number"
+                    autoComplete="tel"
                   />
                 </div>
                 <div className="mb-3">
                   <input
                     ref={passwordRef}
+                    name="password"
                     type="password"
                     className="form-control"
                     placeholder="Password"
+                    autoComplete="new-password"
                   />
                 </div>
                 <div className="d-flex justify-content-center">
                   <button
-                    onClick={onRegistration}
                     type="submit"
                     className="btn btn-success w-100 text-nowrap"
                   >
@@ -122,19 +125,19 @@ const RegistrationForm = () => {
                 </div>
               </form>
               {/* Redirect to login page */}
-              <div className="mt-2">
+              <div className="mt-2 text-center">
                 <Link
                   to="/login"
                   className="link-underline link-underline-opacity-0"
                 >
-                  SignIn
+                  Sign In
                 </Link>
                 <br />
                 <Link
                   to="/ForgetPassword"
                   className="link-underline link-underline-opacity-0"
                 >
-                  Forget Password
+                  Forgot Password?
                 </Link>
               </div>
             </div>
