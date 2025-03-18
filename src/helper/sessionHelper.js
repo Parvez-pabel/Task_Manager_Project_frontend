@@ -14,6 +14,4 @@ class sessionHelper {
 }
 
 export const { setToken, getToken, setUserDetails, getUserDetails } =
-    new sessionHelper();
-// Usage:
-  
+  new sessionHelper();

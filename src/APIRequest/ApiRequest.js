@@ -2,7 +2,7 @@ import axios from "axios";
 import { ErrorToast, SuccessToast } from "../helper/FormHelper";
 import store from "../redux/store/store";
 import { HideLoader, ShowLoader } from "../redux/state-Slice/SattingSlice";
-import { setToken, setUserDetails } from "../helper/sessionHelper";
+import { getToken, setToken, setUserDetails } from "../helper/sessionHelper";
 
 const BaseUrl = "https://task-manager-project-pearl.vercel.app/api/v1";
 
@@ -23,7 +23,7 @@ export async function RegistrationRequest(
       headers: { "Content-Type": "application/json" },
     };
     // Make the API request
-    const response = await axios.post(URL, PostBody,header);
+    const response = await axios.post(URL, PostBody, header);
 
     // Check for successful response
     if (response.status === 200) {
@@ -56,18 +56,18 @@ export async function RegistrationRequest(
 
     return false;
   } finally {
-    store.dispatch(HideLoader()); // Always hide loader
+    store.dispatch(HideLoader());
+    // Always hide loader
   }
 }
+
 // login API request
 
 export async function LoginRequest(email, password) {
-  
   store.dispatch(ShowLoader());
-  
+
   // Show loader at start
   try {
-    
     const URL = `${BaseUrl}/login`;
     const PostBody = { email: email, password: password };
 
@@ -80,7 +80,7 @@ export async function LoginRequest(email, password) {
       setUserDetails(data.user);
       SuccessToast("Login Successful");
       // Redirect to dashboard
-      
+
       return true;
     }
   } catch (error) {
@@ -98,3 +98,63 @@ export async function LoginRequest(email, password) {
   }
   return false;
 }
+
+//create task api request
+
+let header = {
+  headers: {
+    token: getToken(), // Correct token format
+    // Ensure email is sent if required
+  },
+};
+console.log(header);
+// export function CreateTaskRequest(title, description) {
+//   store.dispatch(ShowLoader()); // Show loader at start
+
+//   let URL = BaseUrl + "/createTask";
+//   const PostBody = { title, description, status: "New" };
+//   return axios
+//     .post(URL, PostBody, header)
+//     .then((res) => {
+//       store.dispatch(HideLoader());
+//       if (res.status === 200) {
+//         SuccessToast("Task created successfully");
+//         return true;
+//       } else {
+//         ErrorToast("Failed to create task. Please try again.");
+//         return false;
+//       }
+//     })
+//     .catch((err) => {
+//       console.error("Create Task Error:", err);
+//       store.dispatch(HideLoader());
+//       ErrorToast("Server Error. Please check your internet connection.");
+//       return false;
+//     });
+// }
+export async function CreateTaskRequest(title, description) {
+  store.dispatch(ShowLoader()); // Show loader at start
+
+  let URL = BaseUrl + "/createTask";
+  const PostBody = { title, description, status: "New" };
+
+  try {
+    const res = await axios.post(URL, PostBody, header);
+    store.dispatch(HideLoader());
+
+    if (res.status === 200) {
+      SuccessToast("Task created successfully");
+      return true;
+    } else {
+      ErrorToast("Failed to create task. Please try again.");
+      return false;
+    }
+  } catch (err) {
+    console.error("Create Task Error:", err);
+    store.dispatch(HideLoader());
+    ErrorToast("Server Error. Please check your internet connection.");
+    return false;
+  }
+}
+
+// get all tasks api request
