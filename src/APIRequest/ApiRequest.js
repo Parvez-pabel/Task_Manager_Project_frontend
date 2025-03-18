@@ -19,9 +19,11 @@ export async function RegistrationRequest(
   try {
     const URL = `${BaseUrl}/registration`;
     const PostBody = { email, firstName, lastName, mobile, password, photo };
-
+    const header = {
+      headers: { "Content-Type": "application/json" },
+    };
     // Make the API request
-    const response = await axios.post(URL, PostBody);
+    const response = await axios.post(URL, PostBody,header);
 
     // Check for successful response
     if (response.status === 200) {
