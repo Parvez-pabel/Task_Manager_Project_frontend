@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { GetTasksByStatusRequest } from "../../APIRequest/ApiRequest";
 
 const Completed = () => {
+  useEffect(() => {
+    GetTasksByStatusRequest("Completed");
+  }, []);
   return (
     <>
       <div className="container-fluid ">

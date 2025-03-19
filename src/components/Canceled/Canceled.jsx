@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { GetTasksByStatusRequest } from "../../APIRequest/ApiRequest";
 
 const Canceled = () => {
+  useEffect(() => {
+    GetTasksByStatusRequest("Canceled");
+  }, []);
+
   return (
     <>
       <div className="container-fluid ">

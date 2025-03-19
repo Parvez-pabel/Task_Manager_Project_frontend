@@ -3,6 +3,13 @@ import { ErrorToast, SuccessToast } from "../helper/FormHelper";
 import store from "../redux/store/store";
 import { HideLoader, ShowLoader } from "../redux/state-Slice/SattingSlice";
 import { getToken, setToken, setUserDetails } from "../helper/sessionHelper";
+import {
+  SetCanceledTask,
+  SetCompletedTask,
+  SetNewTask,
+  SetProgressTask,
+
+} from "../redux/state-Slice/TaskSlice";
 
 const BaseUrl = "https://task-manager-project-pearl.vercel.app/api/v1";
 
@@ -107,31 +114,7 @@ let header = {
     // Ensure email is sent if required
   },
 };
-console.log(header);
-// export function CreateTaskRequest(title, description) {
-//   store.dispatch(ShowLoader()); // Show loader at start
 
-//   let URL = BaseUrl + "/createTask";
-//   const PostBody = { title, description, status: "New" };
-//   return axios
-//     .post(URL, PostBody, header)
-//     .then((res) => {
-//       store.dispatch(HideLoader());
-//       if (res.status === 200) {
-//         SuccessToast("Task created successfully");
-//         return true;
-//       } else {
-//         ErrorToast("Failed to create task. Please try again.");
-//         return false;
-//       }
-//     })
-//     .catch((err) => {
-//       console.error("Create Task Error:", err);
-//       store.dispatch(HideLoader());
-//       ErrorToast("Server Error. Please check your internet connection.");
-//       return false;
-//     });
-// }
 export async function CreateTaskRequest(title, description) {
   store.dispatch(ShowLoader()); // Show loader at start
 
@@ -157,4 +140,33 @@ export async function CreateTaskRequest(title, description) {
   }
 }
 
-// get all tasks api request
+// get all tasks list api request by status
+
+export function GetTasksByStatusRequest(status) {
+  store.dispatch(ShowLoader()); // Show loader at start
+
+  let URL = `${BaseUrl}/getTaskByStatus/${status}`;
+  axios
+    .get(URL, header)
+    .then((res) => {
+      store.dispatch(HideLoader());
+      if (res.status === 200) {
+        if (status === "New") {
+          store.dispatch(SetNewTask(res.data.data));
+        } else if (status === "Completed") {
+          store.dispatch(SetCompletedTask(res.data.data));
+        } else if (status === "Canceled") {
+          store.dispatch(SetCanceledTask(res.data.data));
+        }  else if (status === "InProgress") {
+          store.dispatch(SetProgressTask(res.data.data));
+        }
+      } else {
+        ErrorToast("Failed to fetch tasks. Please try again.");
+      }
+    })
+    .catch((err) => {
+      console.error("Get Tasks Error:", err);
+      store.dispatch(HideLoader());
+      ErrorToast("Server Error. Please check your internet connection.");
+    });
+}
