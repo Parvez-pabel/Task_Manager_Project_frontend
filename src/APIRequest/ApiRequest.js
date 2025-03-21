@@ -8,10 +8,17 @@ import {
   SetCompletedTask,
   SetNewTask,
   SetProgressTask,
-
 } from "../redux/state-Slice/TaskSlice";
+import { setSummary } from "../redux/state-Slice/SummerySlice";
 
 const BaseUrl = "https://task-manager-project-pearl.vercel.app/api/v1";
+
+let header = {
+  headers: {
+    token: getToken(), // Correct token format
+    // Ensure email is sent if required
+  },
+};
 
 // Registration API request
 export async function RegistrationRequest(
@@ -108,13 +115,6 @@ export async function LoginRequest(email, password) {
 
 //create task api request
 
-let header = {
-  headers: {
-    token: getToken(), // Correct token format
-    // Ensure email is sent if required
-  },
-};
-
 export async function CreateTaskRequest(title, description) {
   store.dispatch(ShowLoader()); // Show loader at start
 
@@ -146,19 +146,20 @@ export function GetTasksByStatusRequest(status) {
   store.dispatch(ShowLoader()); // Show loader at start
 
   let URL = `${BaseUrl}/getTaskByStatus/${status}`;
-  axios
+  return axios
     .get(URL, header)
     .then((res) => {
       store.dispatch(HideLoader());
+      console.log("API Response:", res.data);
       if (res.status === 200) {
         if (status === "New") {
-          store.dispatch(SetNewTask(res.data.data));
+          store.dispatch(SetNewTask(res.data.tasks));
         } else if (status === "Completed") {
-          store.dispatch(SetCompletedTask(res.data.data));
+          store.dispatch(SetCompletedTask(res.data.tasks));
         } else if (status === "Canceled") {
-          store.dispatch(SetCanceledTask(res.data.data));
-        }  else if (status === "InProgress") {
-          store.dispatch(SetProgressTask(res.data.data));
+          store.dispatch(SetCanceledTask(res.data.tasks));
+        } else if (status === "InProgress") {
+          store.dispatch(SetProgressTask(res.data.tasks));
         }
       } else {
         ErrorToast("Failed to fetch tasks. Please try again.");
@@ -166,6 +167,52 @@ export function GetTasksByStatusRequest(status) {
     })
     .catch((err) => {
       console.error("Get Tasks Error:", err);
+      store.dispatch(HideLoader());
+      ErrorToast("Server Error. Please check your internet connection.");
+    });
+}
+
+// Summary
+export async function SummaryRequest() {
+  store.dispatch(ShowLoader()); // Show loader at start
+  let URL = `${BaseUrl}/countTasksByStatus`;
+
+  try {
+    const res = await axios.get(URL, header);
+    store.dispatch(HideLoader());
+
+    if (res?.status === 200) {
+      store.dispatch(ShowLoader());
+      store.dispatch(setSummary(res.data));
+      // Debugging
+    } else {
+      ErrorToast("Failed to fetch summary. Please try again.");
+    }
+  } catch (err) {
+    console.error("Summary Error:", err);
+    store.dispatch(HideLoader());
+    ErrorToast("Server Error. Please check your internet connection.");
+  }
+}
+
+//get all task
+
+export function GetAllTasksRequest() {
+  store.dispatch(ShowLoader()); // Show loader at start
+  let URL = `${BaseUrl}/getAllTasks`;
+  return axios
+    .get(URL, header)
+    .then((res) => {
+      store.dispatch(HideLoader());
+      console.log("API Response:", res.data);
+      if (res.status === 200) {
+        store.dispatch(SetNewTask(res.data.tasks));
+      } else {
+        ErrorToast("Failed to fetch tasks. Please try again.");
+      }
+    })
+    .catch((err) => {
+      console.error("Get All Tasks Error:", err);
       store.dispatch(HideLoader());
       ErrorToast("Server Error. Please check your internet connection.");
     });

@@ -20,7 +20,7 @@ export const taskSlice = createSlice({
     },
     SetCanceledTask: (state, action) => {
       state.Canceled = action.payload;
-    }
+    },
   },
 });
 
@@ -29,7 +29,6 @@ export const {
   SetCompletedTask,
   SetProgressTask,
   SetCanceledTask,
-  SetTasks,
 } = taskSlice.actions;
 
 export default taskSlice.reducer;

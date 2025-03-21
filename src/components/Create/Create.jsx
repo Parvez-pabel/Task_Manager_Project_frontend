@@ -18,10 +18,9 @@ const Create = () => {
       ErrorToast("Description Required!");
     } else {
       CreateTaskRequest(title, description).then((result) => {
-       
-        if (result===true) {
+        if (result === true) {
           SuccessToast("Task Created Successfully!");
-          window.location.href = "/All"; // Redirect to dashboard after creating task
+          window.location.href = "/New"; // Redirect to dashboard after creating task
         } else {
           ErrorToast("Failed to Create Task!");
         }

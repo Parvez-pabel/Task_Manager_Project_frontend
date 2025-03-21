@@ -1,36 +1,116 @@
-import React, { useEffect } from "react";
 import { GetTasksByStatusRequest } from "../../APIRequest/ApiRequest";
+import { useSelector } from "react-redux";
+import { Modal, Button } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
 
-const Canceled = () => {
+const Completed = () => {
   useEffect(() => {
     GetTasksByStatusRequest("Canceled");
   }, []);
 
-  return (
-    <>
-      <div className="container-fluid ">
-        <h1 className="text-center m-5">Canceled Task</h1>
+  const CanceledTask = useSelector((state) => state.tasks?.Canceled || []);
+  const CanceledTaskArray = Object.values(CanceledTask);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
+  
+  const handleCardClick = (task) => {
+    setSelectedTask(task);
+    setShowModal(true);
+  };
 
-        {/* Row for better responsiveness */}
-        <div className="row justify-content-center ">
-          <div className="p-lg-2 col-lg-3 col-md-4 col-sm-12 col-12 p-2">
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedTask(null);
+  };
+  return (
+    <div className="container-fluid ">
+      <h1 className="text-center m-5 ">Canceled Task</h1>
+      <hr className="w-25 mx-auto" />
+
+      {/* Row for better responsiveness */}
+      {CanceledTaskArray.length > 0 ? (
+        <div className="p-5 row justify-content-center">
+          {CanceledTaskArray.map((item, i) => (
             <div
-              className="card text-black shadow border-0 rounded-4 mb-3 "
-              style={{ maxWidth: "500px" }}
+              key={i.toString()}
+              className="p-lg-2 col-lg-3 col-md-4 col-sm-12 col-12 p-2"
             >
-              <div className="card-body text-center">
-                <h5 className="card-title">task title</h5>
-                <p className="card-text">Lorem ipsum dolor, sit amet</p>
-              </div>
-              <div className="ms-3 mb-3 fw-bold " style={{ color: "#E50046" }}>
-                Canceled
+              <div className="shadow border-0 rounded-4 mb-3 pb-2">
+                <div
+                  className=" card text-black border-0"
+                  style={{ maxWidth: "500px", cursor: "pointer" }}
+                  onClick={() => handleCardClick(item)}
+                >
+                  <div className="card-body ">
+                    <h5 className="card-title">{item.title}</h5>
+                    <hr />
+                    <p
+                      style={{
+                        height: "100px",
+                        overflowY: "auto",
+                      }}
+                      className="card-text"
+                    >
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+                <div className=" m-3 d-flex gap-3 justify-content-end align-items-center">
+                  <i
+                    className="bi bi-calendar3-week-fill"
+                    style={{ color: "#7886C7" }}
+                  >
+                    <span className="ms-2">{item.createdAt}</span>
+                  </i>
+                  <button className="btn p-0">
+                    <i
+                      className="bi bi-pencil-square"
+                      style={{ color: "#7886C7" }}
+                    ></i>
+                  </button>
+                  <button className="btn p-0">
+                    <i
+                      className="bi bi-trash3-fill"
+                      style={{ color: "#7886C7" }}
+                    ></i>
+                  </button>
+                  <div>
+                    <h6 className="fw-bold" style={{ color: "#E52020" }}>
+                      <span className="">{item.status}</span>
+                    </h6>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
-      </div>
-    </>
+      ) : (
+        <p className="text-center">Please wait.........</p>
+      )}
+      {/* Modal to show task details */}
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>{selectedTask?.title}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="bg-light">
+          <p>
+            <strong>Description:</strong> {selectedTask?.description}
+          </p>
+          <p>
+            <strong>Date:</strong> {selectedTask?.createdAt}
+          </p>
+          <p>
+            <strong>Status:</strong> {selectedTask?.status}
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
   );
 };
 
-export default Canceled;
+export default Completed;
