@@ -14,7 +14,6 @@ import ForgetPasswordPage from "./pages/ForgetPasswordPage";
 import ContactUsPage from "./pages/ContactUsPage";
 import AboutUsPage from "./pages/AboutUsPage";
 import ServicePage from "./pages/ServicePage";
-import AllTaskPage from "./pages/AllTaskPage";
 import { Toaster } from "react-hot-toast";
 import { getToken } from "./helper/sessionHelper";
 const App = () => {
@@ -26,7 +25,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<DashboardPage />} />
             <Route path="/create" element={<CreatePage />} />
-            <Route path="/All" element={<AllTaskPage />} />
+           
             <Route path="/Progress" element={<ProgressPage />} />
             <Route path="/Completed" element={<CompletedPage />} />
             <Route path="/Canceled" element={<CanceledPage />} />

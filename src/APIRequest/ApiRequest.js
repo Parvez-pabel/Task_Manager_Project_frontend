@@ -195,25 +195,3 @@ export async function SummaryRequest() {
   }
 }
 
-//get all task
-
-export function GetAllTasksRequest() {
-  store.dispatch(ShowLoader()); // Show loader at start
-  let URL = `${BaseUrl}/getAllTasks`;
-  return axios
-    .get(URL, header)
-    .then((res) => {
-      store.dispatch(HideLoader());
-      console.log("API Response:", res.data);
-      if (res.status === 200) {
-        store.dispatch(SetNewTask(res.data.tasks));
-      } else {
-        ErrorToast("Failed to fetch tasks. Please try again.");
-      }
-    })
-    .catch((err) => {
-      console.error("Get All Tasks Error:", err);
-      store.dispatch(HideLoader());
-      ErrorToast("Server Error. Please check your internet connection.");
-    });
-}
