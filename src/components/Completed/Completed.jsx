@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Modal, Button } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import { DeleteTask } from "../../helper/deleteAlert";
+import { UpdateTask } from "../../helper/update Alert";
 
 const Completed = () => {
   useEffect(() => {
@@ -29,6 +30,13 @@ const Completed = () => {
       }
     });
   };
+    const UpdateItem = (id, status) => {
+      UpdateTask(id, status).then((result) => {
+        if (result === true) {
+          GetTasksByStatusRequest("Completed");
+        }
+      });
+    };
   return (
     <div className="container-fluid ">
       <h1 className="text-center m-5 ">Completed Task</h1>
@@ -69,7 +77,10 @@ const Completed = () => {
                   >
                     <span className="ms-2">{item.createdAt}</span>
                   </i>
-                  <button className="btn p-0">
+                  <button
+                    onClick={UpdateItem.bind(this, item._id, item.status)}
+                    className="btn p-0"
+                  >
                     <i
                       className="bi bi-pencil-square"
                       style={{ color: "#7886C7" }}

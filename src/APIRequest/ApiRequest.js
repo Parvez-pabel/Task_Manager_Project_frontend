@@ -218,3 +218,27 @@ export function DeleteRequest(id) {
       return false;
     });
 }
+
+//update task status request
+
+export function UpdateRequest(id, status) {
+  store.dispatch(ShowLoader()); // Show loader at start
+  let URL = `${BaseUrl}/updateStatusTask/${id}/${status}`;
+  return axios
+    .get(URL, header)
+    .then((res) => {
+      store.dispatch(HideLoader());
+      if (res.status === 200) {
+        SuccessToast("Task status updated successfully");
+        return true;
+      } else {
+        ErrorToast("Failed to update task status. Please try again.");
+        return false;
+      }
+    })
+    .catch((err) => {
+      ErrorToast("Something Went Wrong");
+      store.dispatch(HideLoader());
+      return false;
+    });
+}

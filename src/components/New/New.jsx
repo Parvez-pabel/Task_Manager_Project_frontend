@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Modal, Button } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import { DeleteTask } from "../../helper/deleteAlert";
+import { UpdateTask } from "../../helper/update Alert";
 
 const New = () => {
   useEffect(() => {
@@ -26,6 +27,14 @@ const New = () => {
   //delete item
   const DeleteItem = (id) => {
     DeleteTask(id).then((result) => {
+      if (result === true) {
+        GetTasksByStatusRequest("New");
+      }
+    });
+  };
+  //status change
+  const UpdateItem = (id, status) => {
+    UpdateTask(id, status).then((result) => {
       if (result === true) {
         GetTasksByStatusRequest("New");
       }
@@ -70,7 +79,10 @@ const New = () => {
                   >
                     <span className="ms-2">{item.createdAt}</span>
                   </i>
-                  <button className="btn p-0">
+                  <button
+                    onClick={UpdateItem.bind(this, item._id, item.status)}
+                    className="btn p-0"
+                  >
                     <i
                       className="bi bi-pencil-square"
                       style={{ color: "#7886C7" }}
