@@ -150,7 +150,7 @@ export function GetTasksByStatusRequest(status) {
     .get(URL, header)
     .then((res) => {
       store.dispatch(HideLoader());
-      console.log("API Response:", res.data);
+
       if (res.status === 200) {
         if (status === "New") {
           store.dispatch(SetNewTask(res.data.tasks));
@@ -195,3 +195,26 @@ export async function SummaryRequest() {
   }
 }
 
+//delete task
+
+export function DeleteRequest(id) {
+  store.dispatch(ShowLoader()); // Show loader at start
+  let URL = `${BaseUrl}/deleteTask/${id}`;
+  return axios
+    .delete(URL, header)
+    .then((res) => {
+      store.dispatch(HideLoader());
+      if (res.status === 200) {
+        SuccessToast("Task deleted successfully");
+        return true;
+      } else {
+        ErrorToast("Failed to delete task. Please try again.");
+        return false;
+      }
+    })
+    .catch((err) => {
+      ErrorToast("Something Went Wrong");
+      store.dispatch(HideLoader());
+      return false;
+    });
+}

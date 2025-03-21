@@ -2,6 +2,7 @@ import { GetTasksByStatusRequest } from "../../APIRequest/ApiRequest";
 import { useSelector } from "react-redux";
 import { Modal, Button } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
+import { DeleteTask } from "../../helper/deleteAlert";
 
 const New = () => {
   useEffect(() => {
@@ -21,6 +22,16 @@ const New = () => {
     setShowModal(false);
     setSelectedTask(null);
   };
+
+  //delete item
+  const DeleteItem = (id) => {
+    DeleteTask(id).then((result) => {
+      if (result === true) {
+        GetTasksByStatusRequest("New");
+      }
+    });
+  };
+
   return (
     <div className="container-fluid ">
       <h1 className="text-center m-5 ">New Task</h1>
@@ -65,7 +76,10 @@ const New = () => {
                       style={{ color: "#7886C7" }}
                     ></i>
                   </button>
-                  <button className="btn p-0">
+                  <button
+                    onClick={DeleteItem.bind(this, item._id)}
+                    className="btn p-0"
+                  >
                     <i
                       className="bi bi-trash3-fill"
                       style={{ color: "#7886C7" }}
