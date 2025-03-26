@@ -13,7 +13,6 @@ import {
   IsPassword,
   SuccessToast,
 } from "../../helper/FormHelper";
-import { setProfile } from "../../redux/state-Slice/profileSlice";
 
 const Profile = () => {
   useEffect(() => {
