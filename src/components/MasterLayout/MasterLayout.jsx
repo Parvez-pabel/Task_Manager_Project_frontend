@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Offcanvas, Button, Dropdown } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import { getUserDetails, logout } from "../../helper/sessionHelper";
 
 const MasterLayout = (props) => {
   const [showSidebar, setShowSidebar] = useState(false);
-
   const toggleSidebar = () => setShowSidebar(!showSidebar);
+  const userDetailsArray = getUserDetails();
+  const userDetails = userDetailsArray?.[0] || {};
+
+
+  const onLogout = () => {
+    logout();
+  };
 
   return (
     <div className={`main-container ${showSidebar ? "sidebar-open" : ""}`}>
@@ -35,21 +42,27 @@ const MasterLayout = (props) => {
           {/* Profile Dropdown */}
           <div>
             <Dropdown>
-              <Dropdown.Toggle as="button" className="btn border-0 p-0">
+              <Dropdown.Toggle as="button" className=" btn border-0 p-0">
                 <img
                   alt="Profile"
-                  src="https://img.freepik.com/free-vector/smiling-young-man-illustration_1308-174669.jpg"
-                  className="rounded-circle"
+                  src={userDetails.photo}
+                  className=" rounded-circle "
                   width="40"
                   height="40"
                 />
               </Dropdown.Toggle>
-              <Dropdown.Menu className="bg-light shadow rounded-3 p-2 fs-5">
+              <Dropdown.Menu className="bg-light border-0 shadow rounded-3 p-2 fs-5">
+                <p className="text-center">
+                  {userDetails["firstName"] + " " + userDetails["lastName"]}
+                </p>
+                <hr />
                 <Dropdown.Item as={NavLink} to="/Profile">
-                  <i className="bi bi-person-circle me-2"></i> Profile
+                  <i className="text-primary  bi bi-person-circle me-2"></i>
+                  Profile
                 </Dropdown.Item>
-                <Dropdown.Item as={NavLink} to="/Login">
-                  <i className="bi bi-box-arrow-right me-2"></i> Logout
+                <Dropdown.Item as={NavLink} onClick={onLogout} to="/Login">
+                  <i className="text-danger  bi bi-box-arrow-right me-2"></i>
+                  Logout
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
@@ -68,9 +81,7 @@ const MasterLayout = (props) => {
             <NavLink className="nav-link" to="/create">
               <i className="bi bi-plus-lg me-3"></i> Add New Task
             </NavLink>
-            <NavLink className="nav-link" to="/All">
-              <i className="bi bi-list-task me-3"></i> All Tasks
-            </NavLink>
+
             <NavLink className="nav-link" to="/Progress">
               <i className="bi bi-hourglass-split me-3"></i> In Progress Tasks
             </NavLink>

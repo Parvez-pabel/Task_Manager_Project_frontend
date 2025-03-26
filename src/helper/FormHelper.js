@@ -23,6 +23,15 @@ class FormHelper {
   SuccessToast(msg) {
     toast.success(msg, { position: "bottom-center" });
   }
+  //convert image to Base64
+  Base64Image(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    }); // End of Promise
+  }
 }
 
 export const {
@@ -32,4 +41,5 @@ export const {
   IsPassword,
   ErrorToast,
   SuccessToast,
+  Base64Image,
 } = new FormHelper();

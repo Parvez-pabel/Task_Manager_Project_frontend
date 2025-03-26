@@ -25,7 +25,6 @@ const App = () => {
           <Routes>
             <Route path="/" element={<DashboardPage />} />
             <Route path="/create" element={<CreatePage />} />
-           
             <Route path="/Progress" element={<ProgressPage />} />
             <Route path="/Completed" element={<CompletedPage />} />
             <Route path="/Canceled" element={<CanceledPage />} />

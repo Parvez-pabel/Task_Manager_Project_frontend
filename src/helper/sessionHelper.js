@@ -11,7 +11,13 @@ class sessionHelper {
   getUserDetails() {
     return JSON.parse(localStorage.getItem("userDetails"));
   }
+  logout = () => {
+    localStorage.clear();
+    window.location.href = "/login";
+  };
 }
 
-export const { setToken, getToken, setUserDetails, getUserDetails } =
+export const { setToken, getToken, setUserDetails, getUserDetails, logout } =
   new sessionHelper();
+
+//logout or remove session

@@ -47,7 +47,7 @@ const Dashboard = () => {
             return (
               <div key={i} className="col-md-3">
                 <div
-                  className={`card border-0 shadow-sm ${getStatusColor(
+                  className={`text-center card border-0 shadow-sm ${getStatusColor(
                     Item._id
                   )}`}
                 >

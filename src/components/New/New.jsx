@@ -108,7 +108,7 @@ const New = () => {
           ))}
         </div>
       ) : (
-        <p className="text-center">Please wait.........</p>
+        <p className="text-center">There is no task available</p>
       )}
       {/* Modal to show task details */}
       <Modal show={showModal} onHide={handleCloseModal}>

@@ -10,6 +10,7 @@ import {
   SetProgressTask,
 } from "../redux/state-Slice/TaskSlice";
 import { setSummary } from "../redux/state-Slice/SummerySlice";
+import { setProfile } from "../redux/state-Slice/profileSlice";
 
 const BaseUrl = "https://task-manager-project-pearl.vercel.app/api/v1";
 
@@ -238,6 +239,78 @@ export function UpdateRequest(id, status) {
     })
     .catch((err) => {
       ErrorToast("Something Went Wrong");
+      store.dispatch(HideLoader());
+      return false;
+    });
+}
+
+//get profile data
+export function getProfileDetails() {
+  store.dispatch(ShowLoader()); // Show loader at start
+  let URL = `${BaseUrl}/profileDetails`;
+  return axios
+    .get(URL, header)
+    .then((res) => {
+      store.dispatch(HideLoader());
+      if (res.status === 200) {
+        store.dispatch(setProfile(res.data["data"][0]));
+      } else {
+        ErrorToast("Failed to fetch profile details. Please try again.");
+        return null;
+      }
+    })
+    .catch((err) => {
+      ErrorToast("Something Went Wrong");
+      store.dispatch(HideLoader());
+      return null;
+    });
+}
+
+//profile update
+
+export function UpdateProfileRequest(
+  email,
+  firstName,
+  lastName,
+  mobile,
+  password,
+  photo
+) {
+  store.dispatch(ShowLoader()); // Show loader at start
+  let URL = `${BaseUrl}/updateProfile`;
+  const postBody = {
+    email,
+    firstName,
+    lastName,
+    mobile,
+    password,
+    photo,
+  };
+  const userDetails = {
+    email,
+    firstName,
+    lastName,
+    mobile,
+    photo,
+  };
+
+  return axios
+    .post(URL, postBody, header)
+    .then((res) => {
+      store.dispatch(HideLoader());
+      if (res.status === 200) {
+        SuccessToast("Profile updated successfully");
+        setProfile(userDetails);
+        // update user details in redux state(userDetails);
+        return true;
+      } else {
+        ErrorToast("Failed to update profile. Please try again.");
+        return false;
+      }
+    })
+    .catch((err) => {
+      ErrorToast("Something Went Wrong");
+      console.log(err);
       store.dispatch(HideLoader());
       return false;
     });
