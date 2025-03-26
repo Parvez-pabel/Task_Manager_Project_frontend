@@ -41,7 +41,9 @@ const Profile = () => {
 
   // updateProfile
 
-  const updateProfile = () => {
+  const updateProfile = (e) => {
+    e.preventDefault();
+    // Validate form inputs
     let email = emailRef.value;
     let firstName = firstNameRef.value;
     let lastName = lastNameRef.value;
@@ -70,7 +72,7 @@ const Profile = () => {
       ).then((result) => {
         if (result === true) {
           SuccessToast("Profile Updated Successfully");
-          window.location.href = "/"; // Redirect to dashboard after updating profile
+          window.location.href = "/profile"; // Redirect to dashboard after updating profile
         }
       });
     }
@@ -83,7 +85,7 @@ const Profile = () => {
           <div className=" col-lg-6 col-md-6 img-fluid d-flex justify-content-center p-3">
             <img
               ref={(input) => (userImgVwRef = input)}
-              className="shadow rounded-2 img-fluid"
+              className="shadow rounded img-fluid"
               src={ProfileData?.photo}
               alt="Profile"
               width={150}

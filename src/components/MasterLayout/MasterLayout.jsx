@@ -11,7 +11,6 @@ const MasterLayout = (props) => {
   const userDetailsArray = getUserDetails();
   const userDetails = userDetailsArray?.[0] || {};
 
-
   const onLogout = () => {
     logout();
   };
@@ -52,9 +51,7 @@ const MasterLayout = (props) => {
                 />
               </Dropdown.Toggle>
               <Dropdown.Menu className="bg-light border-0 shadow rounded-3 p-2 fs-5">
-                <p className="text-center">
-                  {userDetails["firstName"] + " " + userDetails["lastName"]}
-                </p>
+                <p className="text-center">{userDetails["firstName"]}</p>
                 <hr />
                 <Dropdown.Item as={NavLink} to="/Profile">
                   <i className="text-primary  bi bi-person-circle me-2"></i>
