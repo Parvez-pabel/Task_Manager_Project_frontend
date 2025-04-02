@@ -16,6 +16,9 @@ import AboutUsPage from "./pages/AboutUsPage";
 import ServicePage from "./pages/ServicePage";
 import { Toaster } from "react-hot-toast";
 import { getToken } from "./helper/sessionHelper";
+import SendOTPPage from "./pages/AccountRecoverPage/SendOTPPage";
+import VerifyOTPPage from "./pages/AccountRecoverPage/VerifyOTPPage";
+import CreatePassPage from "./pages/AccountRecoverPage/CreatePassPage";
 const App = () => {
   if (getToken()) {
     return (
@@ -48,6 +51,13 @@ const App = () => {
             <Route path="/contact" element={<ContactUsPage />} />
             <Route path="/about" element={<AboutUsPage />} />
             <Route path="/service" element={<ServicePage />} />
+
+            {/* Account Recovery */}
+            <Route path="/sendOtp" element={<SendOTPPage />} />
+            <Route path="/verifyOTP" element={<VerifyOTPPage />} />
+            <Route path="/createPassword" element={<CreatePassPage />} />
+            {/* End Account Recovery */}
+
             <Route path="*" element={<NotfoundPage />} />
           </Routes>
         </BrowserRouter>

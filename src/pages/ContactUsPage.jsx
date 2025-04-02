@@ -1,13 +1,20 @@
-import React from "react";
-import BasicComponent from "../components/MasterLayout/BasicComponent";
+import React, { Suspense } from "react";
 
+import MasterLayout from "../components/MasterLayout/MasterLayout";
+import Contact from "../components/basicComponent/contact"; // Capitalized
 
 const ContactUsPage = () => {
   return (
-    <>
-      <BasicComponent />
-      <contact />
-    </>
+    <div>
+      <MasterLayout>
+        <Suspense fallback={<p>Loading...</p>}>
+          <Contact /> {/* Capitalized usage */}
+        </Suspense>
+
+        {/* Footer */}
+        <footer></footer>
+      </MasterLayout>
+    </div>
   );
 };
 

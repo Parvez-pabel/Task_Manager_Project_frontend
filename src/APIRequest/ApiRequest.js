@@ -315,3 +315,88 @@ export function UpdateProfileRequest(
       return false;
     });
 }
+
+//Recover password step 1
+//RecoverVerifyEmailRequest
+
+export function RecoverVerifyEmailRequest(email) {
+  store.dispatch(ShowLoader()); // Show loader at start
+  let URL = `${BaseUrl}/verifyEmail/${email}`;
+
+  return axios
+    .get(URL)
+    .then((res) => {
+      store.dispatch(HideLoader());
+      if (res.status === 200) {
+        SuccessToast("Email verified successfully");
+        return true;
+      } else {
+        ErrorToast("Failed to verify email. Please try again.");
+        return false;
+      }
+    })
+    .catch((err) => {
+      ErrorToast("Something Went Wrong");
+      console.log(err);
+      store.dispatch(HideLoader());
+      return false;
+    });
+}
+
+//Recover password step 2
+//RecoverVerifyOTP Verify
+export function RecoverVerifyOTPRequest(email, otp) {
+  store.dispatch(ShowLoader()); // Show loader at start
+  let URL = `${BaseUrl}/verifyOtp/${email}/${otp}`;
+
+  return axios
+    .get(URL)
+    .then((res) => {
+      store.dispatch(HideLoader());
+      if (res.status === 200) {
+        SuccessToast("OTP verified successfully");
+        return true;
+      } else {
+        ErrorToast("Failed to verify OTP. Please try again.");
+        return false;
+      }
+    })
+    .catch((err) => {
+      ErrorToast("Something Went Wrong");
+      console.log(err);
+      store.dispatch(HideLoader());
+      return false;
+    });
+}
+
+//Recover password step 3
+//RecoverPassword Verify
+
+export function RecoverVerifyPassRequest(email, otp, password) {
+  store.dispatch(ShowLoader()); // Show loader at start
+  let URL = `${BaseUrl}/RecoverResetPass`;
+  const postBody = {
+    email,
+    otp,
+    password,
+  };
+
+  return axios
+    .get(URL, postBody)
+    .then((res) => {
+      store.dispatch(HideLoader());
+      if (res.status === 200) {
+        SuccessToast("Reset Password successfully");
+        return true;
+      } else {
+        ErrorToast("Error to reset password");
+        return false;
+      }
+    })
+    .catch((err) => {
+      ErrorToast("Something Went Wrong");
+      console.log(err);
+      store.dispatch(HideLoader());
+      return false;
+    });
+}
