@@ -53,7 +53,7 @@ const App = () => {
             <Route path="/service" element={<ServicePage />} />
 
             {/* Account Recovery */}
-            <Route path="/sendOtp" element={<SendOTPPage />} />
+            <Route path="sendOtp/" element={<SendOTPPage />} />
             <Route path="/verifyOTP" element={<VerifyOTPPage />} />
             <Route path="/createPassword" element={<CreatePassPage />} />
             {/* End Account Recovery */}

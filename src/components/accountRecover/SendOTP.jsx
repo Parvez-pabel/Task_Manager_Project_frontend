@@ -14,12 +14,11 @@ const SendOTP = () => {
       
     } else {
       RecoverVerifyEmailRequest(email).then((result) => {
-        // if (result === true) {
-        //   // OTP sent successfully, show OTP verification form
-        //   // window.location.href = "/verify-otp";
-        // } else {
-        //   ErrorToast("Failed to send OTP. Please try again later.");
-        // }
+        if (result === true) {
+          window.location.href = "/verify-otp";
+        } else {
+          ErrorToast("Failed to send OTP. Please try again later.");
+        }
       })
       
     }

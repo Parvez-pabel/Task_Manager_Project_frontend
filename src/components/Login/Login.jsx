@@ -20,7 +20,6 @@ const Login = () => {
     } else {
       LoginRequest(email, pass).then((result) => {
         if (result === true) {
-          
           // Login successful, redirect to dashboard page thorough href
           window.location.href = "/";
         }
@@ -81,7 +80,7 @@ const Login = () => {
                   </Link>
                   <br />
                   <Link
-                    to="/ForgetPassword"
+                    to="/sendOtp"
                     className="link-underline link-underline-opacity-0"
                   >
                     Forget Password

@@ -2,7 +2,12 @@ import axios from "axios";
 import { ErrorToast, SuccessToast } from "../helper/FormHelper";
 import store from "../redux/store/store";
 import { HideLoader, ShowLoader } from "../redux/state-Slice/SattingSlice";
-import { getToken, setToken, setUserDetails } from "../helper/sessionHelper";
+import {
+  getToken,
+  setEmail,
+  setToken,
+  setUserDetails,
+} from "../helper/sessionHelper";
 import {
   SetCanceledTask,
   SetCompletedTask,
@@ -328,8 +333,14 @@ export function RecoverVerifyEmailRequest(email) {
     .then((res) => {
       store.dispatch(HideLoader());
       if (res.status === 200) {
-        SuccessToast("Email verified successfully");
-        return true;
+        if (res.data["status"] === "fail") {
+          ErrorToast("No user found");
+          return false;
+        } else {
+          setEmail(email);
+          SuccessToast("Sent OTP successfully");
+          return true;
+        }
       } else {
         ErrorToast("Failed to verify email. Please try again.");
         return false;
