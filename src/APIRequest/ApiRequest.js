@@ -404,8 +404,13 @@ export function RecoverVerifyPassRequest(email, otp, password) {
     .then((res) => {
       store.dispatch(HideLoader());
       if (res.status === 200) {
-        SuccessToast("Reset Password successfully");
-        return true;
+        if (res.data["status"] === "fail") {
+          ErrorToast(res.data.data);
+          return false
+        } else {
+          SuccessToast("Reset Password successfully");
+          return true;
+        }
       } else {
         ErrorToast("Error to reset password");
         return false;

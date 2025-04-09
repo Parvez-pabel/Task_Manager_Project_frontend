@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { MuiOtpInput } from "mui-one-time-password-input";
-import { ErrorToast } from "../../helper/FormHelper";
+import { ErrorToast, SuccessToast } from "../../helper/FormHelper";
 import { RecoverVerifyOTPRequest } from "../../APIRequest/ApiRequest";
 import { getEmail } from "../../helper/sessionHelper";
 
@@ -8,14 +8,14 @@ const VerifyOTP = () => {
   const [otp, setOtp] = useState(""); // OTP State
   const handleOtpChange = (newValue) => {
     setOtp(newValue); // State Update
-    alert(newValue); // Directly show updated value
   };
 
   const submitOTP = (e) => {
     e.preventDefault();
     if (otp.length === 6) {
-      RecoverVerifyOTPRequest(getEmail(), otp).then((res) => {
+      RecoverVerifyOTPRequest(getEmail(), otp).then((result) => {
         if (result === true) {
+          SuccessToast("OTP verified successfully");
           window.location.href = "/createPassword";
         } else {
           ErrorToast("Invalid OTP. Please try again.");

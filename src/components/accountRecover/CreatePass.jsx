@@ -1,5 +1,7 @@
 import React, { useRef } from "react";
 import { ErrorToast, IsEmpty } from "../../helper/FormHelper";
+import { getEmail, getOtp } from "../../helper/sessionHelper";
+import { RecoverVerifyPassRequest } from "../../APIRequest/ApiRequest";
 
 const CreatePass = () => {
   let PasswordRef,
@@ -15,6 +17,11 @@ const CreatePass = () => {
     } else if (password === confirmPassword) {
       ErrorToast("Password mismatched");
     } else {
+      RecoverVerifyPassRequest(getEmail(), getOtp(), password).then((res) => {
+        if (res === true) {
+          window.location.href = "/Login";
+        }
+      });
     }
   };
   return (
@@ -37,9 +44,10 @@ const CreatePass = () => {
               <form>
                 <div className="mb-3">
                   <input
-                    // ref={(input) => (emailRef = input)}
+                    readOnly={true}
+                    value={getEmail()}
                     type="email"
-                    className="form-control "
+                    className="form-control bg-light "
                     placeholder="Enter your email"
                   />
                 </div>
