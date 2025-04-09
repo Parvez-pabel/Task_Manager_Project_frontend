@@ -15,7 +15,7 @@ const VerifyOTP = () => {
     e.preventDefault();
     if (otp.length === 6) {
       RecoverVerifyOTPRequest(getEmail(), otp).then((res) => {
-        if (res.status === true) {
+        if (result === true) {
           window.location.href = "/createPassword";
         } else {
           ErrorToast("Invalid OTP. Please try again.");
@@ -48,7 +48,7 @@ const VerifyOTP = () => {
                 Enter the 6-digit OTP sent to your email.
               </p>
 
-              <form >
+              <form>
                 <div className="mb-3 text-center">
                   <MuiOtpInput
                     length={6}
