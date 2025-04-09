@@ -1,29 +1,28 @@
 import React, { useRef } from "react";
-import { ErrorToast, IsEmail } from "../../helper/FormHelper";
+import { ErrorToast, IsEmail, SuccessToast } from "../../helper/FormHelper";
 import { RecoverVerifyEmailRequest } from "../../APIRequest/ApiRequest";
-
 
 const SendOTP = () => {
   let emailRef = useRef();
-  const verifyEmail = (event) => { 
+  const verifyEmail = (event) => {
     event.preventDefault();
     let email = emailRef.value;
 
     if (!IsEmail(email)) {
       ErrorToast("Valid Email Address Required");
-      
     } else {
       RecoverVerifyEmailRequest(email).then((result) => {
         if (result === true) {
-          window.location.href = "/verify-otp";
+          // OTP sent successfully, show OTP verification form
+          
+          window.location.href = "/verifyOTP";
+           SuccessToast(" 6 Digit Otp code successfully sent in your mail");
         } else {
           ErrorToast("Failed to send OTP. Please try again later.");
         }
-      })
-      
+      });
     }
-
-  }
+  };
   return (
     <div className="container-fluid d-flex justify-content-center align-items-center vh-100">
       <div className="row w-100">
@@ -42,7 +41,7 @@ const SendOTP = () => {
               <form>
                 <div className="mb-3">
                   <input
-                      ref={(input) => (emailRef = input)}
+                    ref={(input) => (emailRef = input)}
                     type="email"
                     className="form-control "
                     placeholder="Enter your email"
@@ -50,9 +49,7 @@ const SendOTP = () => {
                 </div>
                 <div className="d-flex justify-content-center">
                   <button
-                    onClick={
-                      verifyEmail
-                    }
+                    onClick={verifyEmail}
                     type="submit"
                     className="btn btn-success w-100 text-nowrap"
                   >

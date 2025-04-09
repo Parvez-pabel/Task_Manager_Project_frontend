@@ -5,6 +5,7 @@ import { HideLoader, ShowLoader } from "../redux/state-Slice/SattingSlice";
 import {
   getToken,
   setEmail,
+  setOtp,
   setToken,
   setUserDetails,
 } from "../helper/sessionHelper";
@@ -365,8 +366,14 @@ export function RecoverVerifyOTPRequest(email, otp) {
     .then((res) => {
       store.dispatch(HideLoader());
       if (res.status === 200) {
-        SuccessToast("OTP verified successfully");
-        return true;
+        if (res.data["status"] === "fail") {
+          ErrorToast("Failed to verify OTP. Please try again.");
+          return false;
+        } else {
+          setOtp(otp);
+          SuccessToast("OTP verified successfully");
+          return true;
+        }
       } else {
         ErrorToast("Failed to verify OTP. Please try again.");
         return false;

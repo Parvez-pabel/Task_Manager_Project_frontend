@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { MuiOtpInput } from "mui-one-time-password-input";
 import { ErrorToast } from "../../helper/FormHelper";
 import { RecoverVerifyOTPRequest } from "../../APIRequest/ApiRequest";
+import { getEmail } from "../../helper/sessionHelper";
 
 const VerifyOTP = () => {
   const [otp, setOtp] = useState(""); // OTP State
@@ -13,10 +14,9 @@ const VerifyOTP = () => {
   const submitOTP = (e) => {
     e.preventDefault();
     if (otp.length === 6) {
-      RecoverVerifyOTPRequest().then((res) => {
-        if (res.status === 200) {
-          setOtp(""); // OTP Reset
-          window.location.href = "/dashboard";
+      RecoverVerifyOTPRequest(getEmail(), otp).then((res) => {
+        if (res.status === true) {
+          window.location.href = "/createPassword";
         } else {
           ErrorToast("Invalid OTP. Please try again.");
         }
@@ -48,7 +48,7 @@ const VerifyOTP = () => {
                 Enter the 6-digit OTP sent to your email.
               </p>
 
-              <form onSubmit={submitOTP}>
+              <form >
                 <div className="mb-3 text-center">
                   <MuiOtpInput
                     length={6}
@@ -85,14 +85,6 @@ const VerifyOTP = () => {
                     }}
                   />
                 </div>
-
-                {/* Resend OTP Link */}
-                {/* <div className="text-center mt-2">
-                  <a href="#" className="text-primary fw-bold">
-                    Resend OTP
-                  </a>
-                </div> */}
-
                 {/* Submit Button */}
                 <div className="d-grid mt-3">
                   <button
