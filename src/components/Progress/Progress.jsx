@@ -70,7 +70,7 @@ const Progress = () => {
                     </p>
                   </div>
                 </div>
-                <div className=" m-3 d-flex gap-3 justify-content-end align-items-center">
+                <div className=" m-3 d-flex gap-3 justify-content-end align-items-center pb-3">
                   <i
                     className="bi bi-calendar3-week-fill"
                     style={{ color: "#7886C7" }}
