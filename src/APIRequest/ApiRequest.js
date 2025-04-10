@@ -400,13 +400,13 @@ export function RecoverVerifyPassRequest(email, otp, password) {
   };
 
   return axios
-    .get(URL, postBody)
+    .post(URL, postBody)
     .then((res) => {
       store.dispatch(HideLoader());
       if (res.status === 200) {
         if (res.data["status"] === "fail") {
-          ErrorToast(res.data.data);
-          return false
+          ErrorToast("error");
+          return false;
         } else {
           SuccessToast("Reset Password successfully");
           return true;

@@ -12,9 +12,9 @@ const CreatePass = () => {
     let confirmPassword = ConfirmPasswordRef.value;
     if (IsEmpty(password)) {
       ErrorToast("Password Required");
-    } else if (confirmPassword) {
+    } else if (IsEmpty(confirmPassword)) {
       ErrorToast("Password Required");
-    } else if (password === confirmPassword) {
+    } else if (password !== confirmPassword) {
       ErrorToast("Password mismatched");
     } else {
       RecoverVerifyPassRequest(getEmail(), getOtp(), password).then((res) => {
