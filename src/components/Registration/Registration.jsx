@@ -65,7 +65,7 @@ const RegistrationForm = () => {
             style={{ maxWidth: "400px" }}
           >
             <img
-              src={"photo"}
+              src="https://thumbs.dreamstime.com/b/registration-form-cute-cartoon-man-sign-up-filling-all-fields-signing-cta-concept-clipboard-to-fill-flat-line-vector-224547212.jpg"
               className="card-img-top w-50 mx-auto d-block"
               alt="Register Now"
             />
